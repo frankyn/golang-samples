@@ -77,6 +77,24 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// enable requester pays
+	if err := enableRequesterPays(client, name); err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("enabled requester pays with: %v\n", name)
+
+	// check requester pays status
+	if err := checkRequesterPays(client, name); err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("checked requester pays status for: %v\n", name)
+
+	// disable requester pays
+	if err := disableRequesterPays(client, name); err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("disabled requester pays with %v\n", name);
+
 	// delete the bucket
 	if err := delete(client, name); err != nil {
 		log.Fatal(err)

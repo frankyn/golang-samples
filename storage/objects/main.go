@@ -75,6 +75,10 @@ func main() {
 		if err := delete(client, bucket, object); err != nil {
 			log.Fatalf("Cannot to delete object: %v", err)
 		}
+	case "downloadRequesterPays":
+		if err := downloadUsingRequesterPays(client, bucket, object); err != nil {
+			log.Fatalf("Cannot download object: %v", err)
+		}
 	}
 }
 
@@ -289,11 +293,13 @@ func rotateEncryptionKey(client *storage.Client, bucket, object string, key, new
 	return nil
 }
 
-func downloadUsingRequesterPays(client *storage.Client, object, bucketName, localpath, billingProjectID string) error {
+func downloadUsingRequesterPays(client *storage.Client, bucketName, object string) error {
 	ctx := context.Background()
 	// [START storage_download_file_requester_pays]
+	billingProjectID := "franks-test-project-for-yea"
 	bucket := client.Bucket(bucketName).UserProject(billingProjectID)
 	src := bucket.Object(object)
+	localpath := "file.txt"
 
 	f, err := os.OpenFile(localpath, os.O_RDWR|os.O_CREATE, 0755)
 	if err != nil {
